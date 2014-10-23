@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/op/go-logging"
+	storage "github.com/wlsailor/topod/store"
 	"os"
 )
 
@@ -22,4 +23,12 @@ func main() {
 		fmt.Printf("Topod version %s\n", Version)
 		os.Exit(0)
 	}
+	if err := initConfig(); err != nil {
+		log.Fatal(err.Error())
+	}
+	log.Notice("Starting topod")
+	storeClient, _ := storage.NewClient(storeConfig)
+	values, _ := storeClient.GetValues([]string{"/products/kmsocial/mysql/url"})
+	value := values["/products/kmsocial/mysql/url"]
+	fmt.Println("Value of key /products/kmsocial/mysql/url", value)
 }
