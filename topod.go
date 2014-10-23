@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"github.com/op/go-logging"
 	"os"
@@ -18,8 +17,8 @@ func init() {
 }
 
 func main() {
-	flag.Parse()
-	if version {
+	//flag.Parse()
+	if options.Version {
 		fmt.Printf("Topod version %s\n", Version)
 		os.Exit(0)
 	}
