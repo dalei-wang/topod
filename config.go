@@ -145,6 +145,7 @@ func initConfig() error {
 		log.Debug("Start loading config file " + configFile)
 		configBytes, err := ioutil.ReadFile(configFile)
 		if err != nil {
+			//log.Warning("Reading config file %s error : %s, use empty config instead", configFile, err.Error())
 			return err
 		}
 		_, err = toml.Decode(string(configBytes), &config)
