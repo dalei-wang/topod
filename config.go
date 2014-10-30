@@ -13,6 +13,7 @@ import (
 	"github.com/voxelbrain/goptions"
 
 	"github.com/wlsailor/topod/conf/template"
+	"github.com/wlsailor/topod/logger"
 	storage "github.com/wlsailor/topod/store"
 )
 
@@ -64,17 +65,19 @@ type PullOptions struct {
 type GenOptions struct {
 }
 type CommandOptions struct {
-	Store      string        `goptions:"-s, --store, description='remote conf store to use, etcd or consule'"`
-	StoreNodes Nodes         `goptions:"-n, --nodes, description='remote storage uri, format host:port, host:port'"`
-	Schema     string        `goptions:"-m, --schema, description='remote storage service schema(http|https)'"`
-	Config     string        `goptions:"-c, --config, description='topod config file path'"`
-	ConfDir    string        `goptions:"-d, --confdir, description='topod config directory'"`
-	Prefix     string        `goptions:"-p, --prefix, description='key path prefix'"`
-	Debug      bool          `goptions:"-b, --debug, description='enable debug log level'"`
-	Verbose    bool          `goptions:"-v, --verbose, description='enable verbose log level'"`
-	Noop       bool          `goptions:"-n, --noop, description='only show pending changes'"`
-	Version    bool          `goptions:"-V, --version, description='print version and exit'"`
-	Help       goptions.Help `goptions:"-h, --help, description='show help'"`
+	Store      string `goptions:"-s, --store, description='remote conf store to use, etcd or consule'"`
+	StoreNodes Nodes  `goptions:"-n, --nodes, description='remote storage uri, format host:port, host:port'"`
+	Schema     string `goptions:"-m, --schema, description='remote storage service schema(http|https)'"`
+	Config     string `goptions:"-c, --config, description='topod config file path'"`
+	ConfDir    string `goptions:"-d, --confdir, description='topod config directory'"`
+	Prefix     string `goptions:"-p, --prefix, description='key path prefix'"`
+	//Backup     bool          `goptions:"-b, --backup, description='enable backup config file'"`
+	//BackupDir  string        `goptions:"-bd, --backupdir, description='back up directories, default use config file current dir'"`
+	Debug   bool          `goptions:"-D, --debug, description='enable debug log level'"`
+	Verbose bool          `goptions:"-v, --verbose, description='enable verbose log level'"`
+	Noop    bool          `goptions:"-n, --noop, description='only show pending changes'"`
+	Version bool          `goptions:"-V, --version, description='print version and exit'"`
+	Help    goptions.Help `goptions:"-h, --help, description='show help'"`
 	goptions.Verbs
 	Watch WatchOptions `goptions:"watch"`
 	Pull  PullOptions  `goptions:"pull"`
@@ -103,10 +106,10 @@ func init() {
 		flag.StringVar(&configFile, "config", "/etc/topod/topod.toml", "config file path")
 		flag.StringVar(&configDir, "confdir", "/etc/topod/conf.d/", "topod config dirrectory")
 		flag.StringVar(&prefix, "prefix", "/", "key path prefix")
-		flag.BoolVar(&debug, "debug", false, "whether to enable debug log level")
+		flag.BoolVar(&debug, "debug", false, "whether to enable debug logger.Log.level")
 		flag.BoolVar(&watch, "watch", false, "use watch mode or pull mode,  if false, interval config is valid")
 		flag.IntVar(&interval, "interval", 60, "pull config interval in secondes")
-		flag.BoolVar(&verbose, "verbose", false, "enable verbose log level")
+		flag.BoolVar(&verbose, "verbose", false, "enable verbose logger.Log.level")
 		flag.BoolVar(&daemon, "daemon", false, "process keep alive, not once and exit")
 		flag.BoolVar(&noop, "noop", false, "only show pending changes")
 		flag.BoolVar(&version, "version", false, "print version and exit")
@@ -119,6 +122,7 @@ func init() {
 	//Prefix:  "/",
 	}
 	goptions.ParseAndFail(&options)
+	//logger.Log.Debug("Parsed options verbs: %s", options.Verbs)
 }
 
 /*
@@ -140,12 +144,12 @@ func initConfig() error {
 	}
 	//update config from config file
 	if configFile == "" {
-		log.Warning("Skiping config file, file not specified")
+		logger.Log.Warning("Skiping config file, file not specified")
 	} else {
-		log.Debug("Start loading config file " + configFile)
+		logger.Log.Debug("Start loading config file " + configFile)
 		configBytes, err := ioutil.ReadFile(configFile)
 		if err != nil {
-			//log.Warning("Reading config file %s error : %s, use empty config instead", configFile, err.Error())
+			//logger.Log.Warning("Reading config file %s error : %s, use empty config instead", configFile, err.Error())
 			return err
 		}
 		_, err = toml.Decode(string(configBytes), &config)
@@ -157,7 +161,6 @@ func initConfig() error {
 	//processFlags()
 	processOptions()
 	//get store service uri from some other service
-	//TODO
 
 	if len(config.StoreNodes) == 0 {
 		switch config.Store {
@@ -222,10 +225,10 @@ func processOptions() {
 	if options.ConfDir != "" {
 		config.ConfDir = options.ConfDir
 	}
-	if options.Debug != false {
+	if options.Debug {
 		config.Debug = options.Debug
 	}
-	if options.Noop != false {
+	if options.Noop {
 		config.Noop = options.Noop
 	}
 	if options.Prefix != "" {
@@ -240,13 +243,12 @@ func processOptions() {
 	if options.Verbose != false {
 		config.Verbose = options.Verbose
 	}
-	if &(options.Watch) != nil {
+	switch options.Verbs {
+	case "watch":
 		config.Watch = options.Watch
-	}
-	if &(options.Gen) != nil {
+	case "gen":
 		config.Gen = options.Gen
-	}
-	if &(options.Pull) != nil {
+	case "pull":
 		config.Pull = options.Pull
 	}
 }

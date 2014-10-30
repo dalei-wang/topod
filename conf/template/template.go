@@ -2,9 +2,6 @@ package template
 
 import (
 	"encoding/json"
-	"errors"
-	"io"
-	"os"
 	"path"
 	"strings"
 )
