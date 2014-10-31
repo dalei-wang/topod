@@ -7,8 +7,6 @@ import (
 	"time"
 
 	goetcd "github.com/coreos/go-etcd/etcd"
-
-	"github.com/wlsailor/topod/logger"
 )
 
 type Client struct {
@@ -84,10 +82,7 @@ func (c *Client) WatchPrefix(prefix string, waitIndex uint64, stopChan chan bool
 	}
 	resp, err := c.Client.Watch(prefix, waitIndex+1, true, nil, stopChan)
 	if err != nil {
-		if resp != nil {
-			logger.Log.Debug("Bad response content %v", resp)
-		}
 		return 0, err
 	}
-	return resp.EtcdIndex, err
+	return resp.Node.ModifiedIndex, err
 }

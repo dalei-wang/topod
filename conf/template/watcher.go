@@ -41,11 +41,15 @@ func (p *Watcher) monitorPrefix(t *TemplateResource) {
 		logger.Log.Debug("Begin watching prefix %s with index %d", t.Prefix, t.lastIndex)
 		index, err := p.config.StoreClient.WatchPrefix(t.Prefix, t.lastIndex, p.stopChan)
 		if err != nil {
+			if err.Error() == "unexpected end of JSON input" {
+				logger.Log.Debug("Watch connection time out, re-establish watch prefix %s", t.Prefix)
+				continue
+			}
 			logger.Log.Error("Watching prefix key %s error: %s", t.Prefix, err.Error())
 			p.errChan <- err
 			continue
 		}
-		logger.Log.Debug("Watching prefix key %s changed, ready to process", t.Prefix)
+		logger.Log.Debug("Watching prefix key %s changed modified index %d, ready to process", t.Prefix, index)
 		t.lastIndex = index
 		if err := t.process(); err != nil {
 			p.errChan <- err
