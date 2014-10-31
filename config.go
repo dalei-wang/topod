@@ -114,6 +114,9 @@ func init() {
 		flag.BoolVar(&noop, "noop", false, "only show pending changes")
 		flag.BoolVar(&version, "version", false, "print version and exit")
 	*/
+	if len(os.Args) == 2 && os.Args[1] == "-test.v=true" {
+		os.Args = os.Args[0:1]
+	}
 	options = CommandOptions{
 	//Store:   "etcd",
 	//Schema:  "http",
@@ -121,6 +124,7 @@ func init() {
 	//ConfDir: "/etc/topod/conf.d/",
 	//Prefix:  "/",
 	}
+	//logger.Log.Info("Command line args:%v", os.Args)
 	goptions.ParseAndFail(&options)
 	//logger.Log.Debug("Parsed options verbs: %s", options.Verbs)
 }
