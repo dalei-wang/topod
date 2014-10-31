@@ -66,7 +66,7 @@ type GenOptions struct {
 }
 type CommandOptions struct {
 	Store      string `goptions:"-s, --store, description='remote conf store to use, etcd or consule'"`
-	StoreNodes Nodes  `goptions:"-n, --nodes, description='remote storage uri, format host:port, host:port'"`
+	StoreNodes Nodes  `goptions:"-N, --nodes, description='remote storage uri, format host:port, host:port'"`
 	Schema     string `goptions:"-m, --schema, description='remote storage service schema(http|https)'"`
 	Config     string `goptions:"-c, --config, description='topod config file path'"`
 	ConfDir    string `goptions:"-d, --confdir, description='topod config directory'"`
