@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-	//flag.Parse()
 	logger.SetLevel(options.Debug, options.Verbose)
 	if options.Version {
 		fmt.Printf("Topod version %s\n", Version)
@@ -24,9 +23,6 @@ func main() {
 	logger.Log.Notice("Starting topod")
 	storeClient, _ := storage.NewClient(storeConfig)
 	templateConfig.StoreClient = storeClient
-	//values, _ := storeClient.GetValues([]string{"/products/kmsocial/mysql/url"})
-	//value := values["/products/kmsocial/mysql/url"]
-	//fmt.Println("Value of key /products/kmsocial/mysql/url", value)
 	if options.Verbs == "gen" {
 		if err := template.ProcessOnce(&templateConfig); err != nil {
 			logger.Log.Error("Generate config file error: %s", err.Error())
