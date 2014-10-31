@@ -1,5 +1,5 @@
-topod
-=====
+# topod
+[![Build Status](https://travis-ci.org/wlsailor/topod.svg?branch=master)](https://travis-ci.org/wlsailor/topod)
 
 Topod is a simple PAAS tools, focus on light weight configuration management and service discovery :
 * Keep your configuration files up-to-date by watching changes of remote storage like etcd
