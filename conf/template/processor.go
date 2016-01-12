@@ -1,7 +1,7 @@
 package template
 
 import (
-	"github.com/wlsailor/topod/logger"
+	"github.com/leightonwong/topod/logger"
 )
 
 type Processor interface {

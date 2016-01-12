@@ -12,9 +12,9 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/voxelbrain/goptions"
 
-	"github.com/wlsailor/topod/conf/template"
-	"github.com/wlsailor/topod/logger"
-	storage "github.com/wlsailor/topod/store"
+	"github.com/leightonwong/topod/conf/template"
+	"github.com/leightonwong/topod/logger"
+	storage "github.com/leightonwong/topod/store"
 )
 
 var (

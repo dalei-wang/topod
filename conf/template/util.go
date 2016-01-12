@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/wlsailor/topod/logger"
+	"github.com/leightonwong/topod/logger"
 )
 
 type fileInfo struct {

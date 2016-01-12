@@ -3,7 +3,7 @@ package template
 import (
 	"sync"
 
-	"github.com/wlsailor/topod/logger"
+	"github.com/leightonwong/topod/logger"
 )
 
 type Watcher struct {

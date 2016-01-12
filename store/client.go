@@ -3,8 +3,8 @@ package store
 import (
 	"errors"
 
-	"github.com/wlsailor/topod/logger"
-	"github.com/wlsailor/topod/store/etcd"
+	"github.com/leightonwong/topod/logger"
+	"github.com/leightonwong/topod/store/etcd"
 )
 
 type StoreClient interface {

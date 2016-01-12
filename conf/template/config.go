@@ -15,9 +15,9 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/wlsailor/topod/logger"
-	"github.com/wlsailor/topod/memkv"
-	"github.com/wlsailor/topod/store"
+	"github.com/leightonwong/topod/logger"
+	"github.com/leightonwong/topod/memkv"
+	"github.com/leightonwong/topod/store"
 )
 
 //Template global config , value init from topod config

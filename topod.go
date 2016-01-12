@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/wlsailor/topod/conf/template"
-	"github.com/wlsailor/topod/logger"
-	storage "github.com/wlsailor/topod/store"
+	"github.com/leightonwong/topod/conf/template"
+	"github.com/leightonwong/topod/logger"
+	storage "github.com/leightonwong/topod/store"
 )
 
 func main() {
